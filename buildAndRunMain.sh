@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-rm -rf out && mkdir out
+JAVA=${JAVA_HOME}/bin/java
+JAVAC=${JAVA_HOME}/bin/javac
 
-${JAVAC} -d out $( find . -name "*.java" )
-${JAVA} -cp out Main
+OUT_DIR=out
+
+rm -rf ${OUT_DIR} && mkdir ${OUT_DIR}
+
+${JAVAC} -d ${OUT_DIR} $( find . -name "*.java" )
+${JAVA} -cp ${OUT_DIR} Main
