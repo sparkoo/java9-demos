@@ -2,5 +2,5 @@
 
 rm -rf out && mkdir out
 
-${JAVAC} -d out src/Main.java
+${JAVAC} -d out $( find . -name "*.java" )
 ${JAVA} -cp out Main
