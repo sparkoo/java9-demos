@@ -13,6 +13,14 @@ public class Main {
         }
         // fail java 9. not effectively final
 //        s = new SomeCloseableClass();
+
+        methodWithCloseable(new SomeCloseableClass());
+    }
+
+    private static void methodWithCloseable(SomeCloseableClass s) throws IOException {
+//        try (s) {
+//            System.out.println("do something in method");
+//        }
     }
 
     private static class SomeCloseableClass implements Closeable {
