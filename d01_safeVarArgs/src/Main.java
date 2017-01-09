@@ -1,29 +1,32 @@
 public class Main {
 
     public static void main(String[] args) {
-        new Main().safeVarArgsPrivate("1", "2", "3");
+        new Main().safeVarArgsPrivate(1, 2, 3);
         new Main().safeVarArgsPublicFinal("one", "two", "three");
-        safeVarArgsStatic("123");
+        safeVarArgsStatic("123", "one two three");
     }
 
     @SafeVarargs
-    private void safeVarArgsPrivate(String... varargs) {
-        for (String s : varargs) {
-            System.out.println(s);
+    private <T> void safeVarArgsPrivate(T... varargs) {
+        for (T s : varargs) {
+            System.out.print(s);
         }
+        System.out.println();
     }
 
     @SafeVarargs
-    public final void safeVarArgsPublicFinal(String... varargs) {
-        for (String s : varargs) {
-            System.out.println(s);
+    public final <T> void safeVarArgsPublicFinal(T... varargs) {
+        for (T s : varargs) {
+            System.out.print(s);
         }
+        System.out.println();
     }
 
     @SafeVarargs
-    static void safeVarArgsStatic(String... varargs) {
-        for (String s : varargs) {
-            System.out.println(s);
+    static <T> void safeVarArgsStatic(T... varargs) {
+        for (T s : varargs) {
+            System.out.print(s);
         }
+        System.out.println();
     }
 }
