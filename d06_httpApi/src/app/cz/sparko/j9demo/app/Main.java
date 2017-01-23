@@ -7,16 +7,43 @@ import jdk.incubator.http.HttpResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class Main {
-    public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
+    static long time = System.currentTimeMillis();
+
+    public static void main(String[] args) throws Exception {
+        //HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
         HttpClient client = HttpClient.newHttpClient();
-        client.send(HttpRequest.newBuilder().uri(new URI("http://localhost:8000")).GET().build(),
-                (statusCode, responseHeaders) -> {
-                    System.out.println(statusCode);
-                    System.out.println(responseHeaders);
-                    return HttpResponse.BodyProcessor.asString(Charset.defaultCharset());
-                });
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("https://sparkoo.github.io/java9-presentation"))
+                .GET()
+                .build();       
+
+        sendRequest(client, request);
+        System.out.println();
+        sendAsyncRequest(client, request);
+    }
+
+    static void sendRequest(HttpClient client, HttpRequest request) throws Exception {
+        stopwatch("send");
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandler.asString());
+        stopwatch("print");
+        Arrays.stream(response.body().split("\n")).limit(5).forEach(System.out::println);
+        stopwatch("done");
+    }
+
+    static void sendAsyncRequest(HttpClient client, HttpRequest request) throws Exception {
+        stopwatch("send");
+        Future<HttpResponse<String>> asyncResponse = client.sendAsync(request, HttpResponse.BodyHandler.asString());
+        stopwatch("get and print");
+        Arrays.stream(asyncResponse.get().body().split("\n")).limit(5).forEach(System.out::println);
+        stopwatch("done");
+    }
+
+    static void stopwatch(String message) {
+        System.out.println((time - System.currentTimeMillis()) + "ms - " + message);
     }
 }
