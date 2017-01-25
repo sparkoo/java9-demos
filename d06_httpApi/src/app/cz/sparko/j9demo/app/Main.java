@@ -15,7 +15,7 @@ public class Main {
     static long time = System.currentTimeMillis();
 
     public static void main(String[] args) throws Exception {
-//        HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
+        //HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("https://sparkoo.github.io/java9-presentation"))
@@ -25,22 +25,32 @@ public class Main {
         startStopwatch();
         sendRequest(client, request);
         System.out.println();
-//        sendAsyncRequest(client, request);
+        //sendAsyncRequest(client, request);
     }
 
     static void sendRequest(HttpClient client, HttpRequest request) throws Exception {
         stopwatch("about to send");
+
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandler.asString());
+
         stopwatch("sent, about to print");
-        Arrays.stream(response.body().split("\n")).limit(5).forEach(System.out::println);
+
+        String body = response.body();
+
+        Arrays.stream(body.split("\n")).limit(5).forEach(System.out::println);
         stopwatch("done");
     }
 
     static void sendAsyncRequest(HttpClient client, HttpRequest request) throws Exception {
         stopwatch("about to send");
+
         Future<HttpResponse<String>> asyncResponse = client.sendAsync(request, HttpResponse.BodyHandler.asString());
+
         stopwatch("sent, about to get and print");
-        Arrays.stream(asyncResponse.get().body().split("\n")).limit(5).forEach(System.out::println);
+
+        String body = asyncResponse.get().body();
+
+        Arrays.stream(body.split("\n")).limit(5).forEach(System.out::println);
         stopwatch("done");
     }
 
