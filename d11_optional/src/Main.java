@@ -7,5 +7,21 @@ public class Main {
 
         o1.ifPresentOrElse(System.out::println, () -> System.out.println("missing value"));
         o2.ifPresentOrElse(System.out::println, () -> System.out.println("missing value"));
+
+        // with map
+        o1.map(s -> {
+            System.out.println(s);
+            return s;
+        }).orElseGet(() -> {
+            System.out.println("missing value");
+            return "";
+        });
+        o2.map(s -> {
+            System.out.println(s);
+            return s;
+        }).orElseGet(() -> {
+            System.out.println("missing value");
+            return "";
+        });
     }
 }

@@ -6,7 +6,8 @@ public class Main {
         ProcessHandle.allProcesses()
                 .filter(p -> p.info().command().orElse("").contains("top"))
                 .forEach(p -> {
-                    System.out.println("destroying [" + p.info() + "]");
+                    System.out.println("killing [" + p.info() + "]");
+                    //System.out.println();
                     p.destroy();
                 });
     }

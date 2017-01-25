@@ -15,35 +15,41 @@ public class Main {
     static long time = System.currentTimeMillis();
 
     public static void main(String[] args) throws Exception {
-        //HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
+//        HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI("https://sparkoo.github.io/java9-presentation"))
                 .GET()
                 .build();       
 
+        startStopwatch();
         sendRequest(client, request);
         System.out.println();
-        sendAsyncRequest(client, request);
+//        sendAsyncRequest(client, request);
     }
 
     static void sendRequest(HttpClient client, HttpRequest request) throws Exception {
-        stopwatch("send");
+        stopwatch("about to send");
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandler.asString());
-        stopwatch("print");
+        stopwatch("sent, about to print");
         Arrays.stream(response.body().split("\n")).limit(5).forEach(System.out::println);
         stopwatch("done");
     }
 
     static void sendAsyncRequest(HttpClient client, HttpRequest request) throws Exception {
-        stopwatch("send");
+        stopwatch("about to send");
         Future<HttpResponse<String>> asyncResponse = client.sendAsync(request, HttpResponse.BodyHandler.asString());
-        stopwatch("get and print");
+        stopwatch("sent, about to get and print");
         Arrays.stream(asyncResponse.get().body().split("\n")).limit(5).forEach(System.out::println);
         stopwatch("done");
     }
 
+    static void startStopwatch() {
+        time = System.currentTimeMillis();
+    }
+
     static void stopwatch(String message) {
-        System.out.println((time - System.currentTimeMillis()) + "ms - " + message);
+        System.out.println((System.currentTimeMillis() - time) + "ms - " + message);
+        time = System.currentTimeMillis();
     }
 }
